@@ -8,12 +8,10 @@ COPY app/ /backend/app
 COPY res/ /backend/res
 
 ENV PYTHONPATH="/backend/"
-ENV MODE=prod
 
-WORKDIR /backend
+WORKDIR /backend/app
 
 # Expose the port on which the application will run
 EXPOSE 8888
 
-#CMD ["uvicorn", "--reload", "--host", "0.0.0.0", "--port", "8000", "app:app"]
-CMD ["python3", "main.py"]
+CMD ["uvicorn", "--reload", "--host", "0.0.0.0", "--port", "8888", "crawler:app"]
