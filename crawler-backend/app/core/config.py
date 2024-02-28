@@ -13,6 +13,7 @@ class Base(BaseSettings):
 
     # Database
     MONGO_CONNECTION_STRING: str = Field("MONGO_CONNECTION_STRING", cast=str)
+    MONGO_DB: str = Field("MONGO_DB", cast=str)
 
     class Config:
         case_sensitive = True

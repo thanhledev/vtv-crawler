@@ -1,4 +1,5 @@
 # system
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from beanie import init_beanie
@@ -48,7 +49,7 @@ async def app_init():
     :return:
     """
     log.info("Starting up VTV Crawler Rest Services")
-    db_client = AsyncIOMotorClient(settings.MONGO_CONNECTION_STRING).vtv_news_db
+    db_client = AsyncIOMotorClient(settings.MONGO_CONNECTION_STRING).get_database(settings.MONGO_DB)
 
     await init_beanie(
         database=db_client,
@@ -64,3 +65,7 @@ app.include_router(router, prefix=settings.API_V1_STR)
 @app.get("/")
 async def hello():
     return {"message": "Hello, World!"}
+
+
+if __name__ == '__main__':
+    uvicorn.run(app, host='0.0.0.0', port=8888)

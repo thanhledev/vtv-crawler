@@ -6,7 +6,6 @@ pip install uvicorn
 
 COPY app/ /backend/app
 COPY res/ /backend/res
-COPY main.py /backend/main.py
 
 ENV PYTHONPATH="/backend/"
 ENV MODE=prod
