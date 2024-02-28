@@ -111,5 +111,5 @@ if SCRAPY_ENV == "dev":
     STORING_COLLECTION = 'thegioi_news'
 elif SCRAPY_ENV == "prod":
     MONGO_URI = 'mongodb://crawler:crawler@localhost:27017/vtv_news_db'
-    MONGO_DB = 'vtv_news_db'
+    MONGO_DB = 'vtv_news_db_prod'
     STORING_COLLECTION = 'thegioi_news'
