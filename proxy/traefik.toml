@@ -1,0 +1,20 @@
+[api]
+dashboard = true
+
+[metrics]
+[metrics.prometheus]
+buckets = [0.1,0.3,1.2,5.0]
+
+[entryPoints]
+[entryPoints.web]
+address = ":80"
+
+[providers]
+# Enable the file provider to define routers / middlewares / services in file
+[providers.file]
+directory = "/etc/traefik/services/"
+watch = true
+[providers.docker]
+exposedbyDefault = false
+defaultRule = "Host(`bongda12h.net`)"
+network = "rest"

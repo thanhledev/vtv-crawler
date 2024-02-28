@@ -1,0 +1,28 @@
+version: '3.8'
+
+networks:
+  rest:
+  db:
+
+volumes:
+  mongodb-vol:
+
+
+services:
+  mongodb:
+    image: mongo:4.0.4
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb-vol:/data/db
+    networks:
+      - db
+
+  backend:
+    image: crawler-backend:0.0.5
+    ports:
+      - '8888:8888'
+    networks:
+      - db
+      - rest
+
