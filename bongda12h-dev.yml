@@ -12,18 +12,15 @@ services:
   mongodb:
     image: mongo
     container_name: mongodb
-    ports:
-      - '27017:27017'
+    #ports:
+    #  - '127.0.0.1:27017:27017'
     volumes:
       - mongodb-vol:/data/db
-      - ./db/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
     networks:
       - db
-    env_file:
-      - mongo.env
     restart: unless-stopped
     healthcheck:
-      test: echo 'db.runCommand({find:"vtv_news_db_prod.admin"}).ok' | mongosh --authenticationDatabase admin --host localhost -u root -p random_pass admin --quiet | grep -q 1
+      test: echo 'db.runCommand("ping").ok' | echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet 
       interval: 10s
       timeout: 10s
       retries: 3 
@@ -31,8 +28,6 @@ services:
   mongo-express:
     image: mongo-express
     container_name: mexpress
-    #ports:
-    #  - '8081:8081'
     networks:
       - db
     env_file:
@@ -40,13 +35,53 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
-      traefik:
-        condition: service_started
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mongo-express.rule=Host(`express.bongda12h.test`)"
       - "traefik.http.routers.mongo-express.middlewares=transparent@file"
       - "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
+
+  vtv_crawler:
+    image: vtvscrapy
+    container_name: vtv_crawler
+    networks:
+      - db
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  vtv_backend:
+    image: vtvfastapi
+    container_name: vtv_backend
+#    environment:
+#      - MODE: 'prod'
+    networks:
+      - db
+      - rest
+#    ports:
+#      - '8888'
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`backend.bongda12h.test`)"
+      - "traefik.http.routers.backend.middlewares=transparent@file"
+      - "traefik.http.services.backend.loadbalancer.server.port=8888"
+
+  vtv_frontend:
+    image: vtvvue3
+    container_name: vtv_frontend
+    networks:
+      - rest
+    depends_on:
+      vtv_backend:
+        condition: service_started
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`bongda12h.test`)"
+      - "traefik.http.routers.frontend.middlewares=transparent@file"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
 
   traefik:
     image: traefik:2.5

@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 
-class VtvspiderSpider(scrapy.Spider):
+class VtvSpider(scrapy.Spider):
     name = "vtvspider"
     allowed_domains = ["vtv.vn"]
     start_urls = ["https://vtv.vn/the-gioi.htm"]
@@ -60,9 +60,7 @@ class VtvspiderSpider(scrapy.Spider):
         for url in news_unique_urls:
             yield response.follow(url=url, callback=self.parse_news_detail)
 
-
     def parse_news_detail(self, response):
-
         news_item = NewsItem()
 
         url_split_array = ((response.url.replace(self.base_url, "").split("/")[2]).split(".")[0]).split("-")

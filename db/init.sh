@@ -1,6 +1,6 @@
 set -e
 mongosh <<EOF
-use admin
+use $MONGODB_DB
 db.createUser({
   user: '$MONGODB_USER',
   pwd:  '$MONGODB_PASSWORD',

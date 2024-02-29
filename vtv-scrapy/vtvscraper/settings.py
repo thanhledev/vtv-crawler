@@ -14,10 +14,6 @@ BOT_NAME = "vtvscraper"
 SPIDER_MODULES = ["vtvscraper.spiders"]
 NEWSPIDER_MODULE = "vtvscraper.spiders"
 
-FEEDS = {
-    'vtv_news.json': {'format': 'json'}
-}
-
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = "vtvscraper (+http://www.yourdomain.com)"
 
@@ -110,6 +106,6 @@ if SCRAPY_ENV == "dev":
     MONGO_DB = 'vtv_news_db_dev'
     STORING_COLLECTION = 'thegioi_news'
 elif SCRAPY_ENV == "prod":
-    MONGO_URI = 'mongodb://admin:crawler@mongodb:27017/vtv_news_db_prod'
+    MONGO_URI = 'mongodb://mongodb:27017/vtv_news_db_prod'
     MONGO_DB = 'vtv_news_db_prod'
     STORING_COLLECTION = 'thegioi_news'

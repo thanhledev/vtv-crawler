@@ -30,17 +30,13 @@ class VtvscraperPipeline:
         self.client = pymongo.MongoClient(self.mongo_uri)
         self.db = self.client[self.mongo_db]
 
-    def close_spider(self, spider):
-        # close db connection
-        self.client.close()
-
     def process_item(self, item, spider):
 
         # save item to db
         if self.db[self.collection_name].find_one({"original_id": item["original_id"]}) is None:
             self.db[self.collection_name].insert_one(dict(item))
-            logging.debug(f"Add news %s to MongoDB", item['title'])
+            logging.info(f"Add news %s to MongoDB", item['title'])
         else:
-            logging.debug(f"News %s existed in MongoDB", item['title'])
+            logging.info(f"News %s existed in MongoDB", item['title'])
 
         return item

@@ -23,7 +23,7 @@ services:
       - mongo.env
     restart: unless-stopped
     healthcheck:
-      test: echo 'db.runCommand({find:"vtv_news_db_prod.admin"}).ok' | mongosh --authenticationDatabase admin --host localhost -u root -p random_pass admin --quiet | grep -q 1
+      test: echo 'db.runCommand({find:"vtv_news_db_prod.admin"}).ok' | mongosh --authenticationdatabase admin --host localhost -u root -p random_pass admin --quiet | grep -q 1
       interval: 10s
       timeout: 10s
       retries: 3 

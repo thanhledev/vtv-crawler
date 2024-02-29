@@ -20,7 +20,7 @@ export const useNewsStore = defineStore('news', () => {
         return getRandomSubArray(newsList.value, 10)
     })
     async function loadNews() {
-        await backend_api.get("/news/")
+        await backend_api.get("/api/v1/news/")
             .then((resp) => {
                 console.log(resp.data)
                 newsList.value = resp.data
@@ -28,7 +28,7 @@ export const useNewsStore = defineStore('news', () => {
             })
     }
     async function retrieveNews(news_id) {
-        await backend_api.get(`/news/${news_id}`)
+        await backend_api.get(`/api/v1/news/${news_id}`)
             .then((resp) => {
                 console.log(resp.data)
                 singleNews.value = resp.data
