@@ -42,8 +42,11 @@ services:
       - "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
 
   vtv_crawler:
-    image: vtvscrapy
+    image: vtv-crawler
     container_name: vtv_crawler
+    build:
+      context: ./vtv-scrapy
+      dockerfile: vtv-crawler.Dockerfile
     networks:
       - db
     depends_on:
@@ -51,8 +54,11 @@ services:
         condition: service_healthy
 
   vtv_backend:
-    image: vtvfastapi
+    image: vtv-fastapi
     container_name: vtv_backend
+    build:
+      context: ./crawler-backend
+      dockerfile: crawler-backend.Dockerfile 
 #    environment:
 #      - MODE: 'prod'
     networks:
@@ -70,8 +76,11 @@ services:
       - "traefik.http.services.backend.loadbalancer.server.port=8888"
 
   vtv_frontend:
-    image: vtvvue3
+    image: vtv-vue3
     container_name: vtv_frontend
+    build:
+      context: ./crawler-frontend
+      dockerfile: crawler-frontend.Dockerfile
     networks:
       - rest
     depends_on:
@@ -115,5 +124,5 @@ services:
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.entrypoints=web"
       - "traefik.http.routers.dashboard.middlewares=dashboard-auth"
-      - "traefik.http.middlewares.dashboard-auth.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/"
+      - "traefik.http.middlewares.dashboard-auth.basicauth.users=test:$$2y$$10$$GyfAMSUq6NE0Kh4tPP2Klec9GCsUAv5adXH4Fni0dPDagFoBWl7Ca"
 
