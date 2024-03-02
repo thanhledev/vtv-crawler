@@ -49,13 +49,13 @@ class VtvSpider(scrapy.Spider):
             self.news_url_list.append(self.base_url + item.root)
 
         # self.logger.debug(f"news_url_list: %s", self.news_url_list)
-
+        self.news_url_list = [url for url in self.news_url_list if "vtv8" not in url]
         news_unique_urls = set(self.news_url_list)
 
         # clean link
         news_unique_urls.remove("https://vtv.vn/the-gioi.htm")
 
-        # self.logger.debug(f"news_unique_urls: %s", news_unique_urls)
+        self.logger.debug(f"news_unique_urls: %s", news_unique_urls)
 
         for url in news_unique_urls:
             yield response.follow(url=url, callback=self.parse_news_detail)

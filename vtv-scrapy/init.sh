@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 export TERM=xterm # docker run -t hack
 while true; do
     python3 main.py
-    sleep 60
+    sleep ${INTERVAL:-60}
 done

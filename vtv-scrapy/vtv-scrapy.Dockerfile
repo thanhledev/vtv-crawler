@@ -1,9 +1,5 @@
 # Pulling Ubuntu image
-FROM ubuntu:20.04
-
-# Updating packages and installing python3 & cron
-RUN apt-get update && \
-    apt-get install python3 python3-pip cron -y
+FROM python:3.10.12-alpine3.18
 
 # create source directory
 WORKDIR /scrapy_app
@@ -20,6 +16,7 @@ ADD ./init.sh /init.sh
 RUN chmod +x /init.sh
 
 ENV SCRAPY_ENV prod
+ENV INTERVAL 300
 
 # Creating entrypoint for cron
 ENTRYPOINT ["/init.sh"]
