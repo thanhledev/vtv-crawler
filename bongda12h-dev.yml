@@ -63,11 +63,11 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`backend.bongda12h.test`)"
-      - "traefik.http.routers.backend.middlewares=transparent@file"
-      - "traefik.http.services.backend.loadbalancer.server.port=8888"
+    #labels:
+    #  - "traefik.enable=true"
+    #  - "traefik.http.routers.backend.rule=Host(`backend.bongda12h.test`)"
+    #  - "traefik.http.routers.backend.middlewares=transparent@file"
+    #  - "traefik.http.services.backend.loadbalancer.server.port=8888"
 
   vtv_frontend:
     image: vtv-vue3
