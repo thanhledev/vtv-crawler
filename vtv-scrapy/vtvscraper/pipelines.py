@@ -30,13 +30,23 @@ class VtvscraperPipeline:
         self.client = pymongo.MongoClient(self.mongo_uri)
         self.db = self.client[self.mongo_db]
 
+    def is_not_blank(self, value: str):
+        return bool(value and not value.isspace())
+
     def process_item(self, item, spider):
 
-        # save item to db
-        if self.db[self.collection_name].find_one({"original_id": item["original_id"]}) is None:
-            self.db[self.collection_name].insert_one(dict(item))
-            logging.info(f"Add news %s to MongoDB", item['title'])
-        else:
-            logging.info(f"News %s existed in MongoDB", item['title'])
+        # check required fields
+        if self.is_not_blank(item['title']) and \
+                self.is_not_blank(item['author']) and \
+                self.is_not_blank(item['sapo']) and \
+                self.is_not_blank(item['content']):
 
+            # save item to db
+            if self.db[self.collection_name].find_one({"original_id": item["original_id"]}) is None:
+                self.db[self.collection_name].insert_one(dict(item))
+                logging.info(f"Add news %s to MongoDB", item['title'])
+            else:
+                logging.info(f"News %s existed in MongoDB", item['title'])
+        else:
+            logging.info(f"News %s (link: %s) is invalid. Ignore!", item['title'], item['original_url'])
         return item

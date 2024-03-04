@@ -23,7 +23,7 @@ class Dev(Base):
     ]
 
     class Config:
-        env_file = Path(__file__).parents[2] / 'res/dev.env'
+        env_file = Path(__file__).parents[2] / 'res/.env.dev'
 
 
 class Staging(Base):
@@ -33,7 +33,7 @@ class Staging(Base):
     ]
 
     class Config:
-        env_file = Path(__file__).parents[2] / 'res/staging.env'
+        env_file = Path(__file__).parents[2] / 'res/.env.staging'
 
 
 class Prod(Base):
@@ -43,7 +43,7 @@ class Prod(Base):
     ]
 
     class Config:
-        env_file = Path(__file__).parents[2] / 'res/prod.env'
+        env_file = Path(__file__).parents[2] / 'res/.env.prod'
 
 
 config = dict(
