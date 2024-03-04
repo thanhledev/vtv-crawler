@@ -21,7 +21,13 @@ services:
       test: echo 'db.runCommand("ping").ok' | echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet 
       interval: 10s
       timeout: 10s
-      retries: 3 
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100k"
+        max-file: "1"
+
 
   mongo-express:
     image: mongo-express
@@ -38,6 +44,11 @@ services:
       - "traefik.http.routers.mongo-express.rule=Host(`express.bongda12h.net`)"
       - "traefik.http.routers.mongo-express.middlewares=transparent@file"
       - "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100k"
+        max-file: "1"
 
   vtv_crawler:
     image: vtv-scrapy
@@ -52,6 +63,12 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100k"
+        max-file: "10"
+
 
   vtv_backend:
     image: vtv-fastapi
@@ -67,17 +84,15 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100k"
+        max-file: "5"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`backend.bongda12h.net`)"
-      #- "traefik.http.routers.backend.middlewares=testheader"
-      #- "traefik.http.middlewares.testheader.headers.customResponseHeaders.accesscontrolallowmethods=*"
-      #- "traefik.http.middlewares.testheader.headers.customResponseHeaders.accesscontrolallowheaders=*"
-      #- "traefik.http.middlewares.testheader.headers.customResponseHeaders.accesscontrolalloworiginlist=http://bongda12h.test"
-      #- "traefik.http.middlewares.testheader.headers.customResponseHeaders.accesscontrolmaxage=100"
-      #- "traefik.http.middlewares.testheader.headers.customResponseHeaders.addvaryheader=true"
       - "traefik.http.routers.backend.middlewares=cors@file"
-      #- "traefik.http.routers.backend.middlewares=backendcors@file"
       - "traefik.http.services.backend.loadbalancer.server.port=8888"
 
   vtv_frontend:
@@ -93,6 +108,11 @@ services:
     depends_on:
       vtv_backend:
         condition: service_started
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100k"
+        max-file: "2"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`bongda12h.net`)"

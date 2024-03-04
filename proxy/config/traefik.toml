@@ -21,5 +21,5 @@ directory = "/etc/traefik/services/"
 watch = true
 [providers.docker]
 exposedbyDefault = false
-defaultRule = "Host(`bongda12h.test`)"
+defaultRule = "Host(`bongda12h.net`)"
 network = "rest"
