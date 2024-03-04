@@ -1,6 +1,11 @@
 [api]
 dashboard = true
 
+[log]
+level = "debug"
+filePath = "/var/log/traefik.log"
+
+
 [metrics]
 [metrics.prometheus]
 buckets = [0.1,0.3,1.2,5.0]

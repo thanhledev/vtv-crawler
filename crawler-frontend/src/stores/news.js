@@ -6,7 +6,7 @@ import { getRandomSubArray } from "@/support/generalHelper.js";
 
 export const useNewsStore = defineStore('news', () => {
     const newsList = ref([])
-    const singleNews = ref()
+    const singleNews = ref({})
     const getAllNews = computed(() => {
         return newsList.value
     })
@@ -20,17 +20,15 @@ export const useNewsStore = defineStore('news', () => {
         return getRandomSubArray(newsList.value, 10)
     })
     async function loadNews() {
-        await backend_api.get("/api/v1/news/")
+        await backend_api.get("/news/")
             .then((resp) => {
-                console.log(resp.data)
                 newsList.value = resp.data
                 saveNewsToStorage(newsList.value)
             })
     }
     async function retrieveNews(news_id) {
-        await backend_api.get(`/api/v1/news/${news_id}`)
+        await backend_api.get(`/news/${news_id}`)
             .then((resp) => {
-                console.log(resp.data)
                 singleNews.value = resp.data
             })
     }

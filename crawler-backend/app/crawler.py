@@ -1,6 +1,7 @@
 # system
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -27,18 +28,21 @@ log = logging.getLogger(__name__)
 LOGGING_CONFIG = Path(__file__).parents[1] / 'res/logging.conf'
 logging.config.fileConfig(LOGGING_CONFIG, disable_existing_loggers=False)
 
+fastapi_middleware = [
+    Middleware(
+        CORSMiddleware,
+        allow_origins=settings.BACKEND_CORS_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+]
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.BACKEND_CORS_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    middleware=fastapi_middleware
 )
 
 
@@ -48,7 +52,8 @@ async def app_init():
         initialize crucial application services
     :return:
     """
-    log.info("Starting up VTV Crawler Rest Services")
+    log.info(f"Starting up VTV Crawler Rest Services")
+    log.info(f"BACKEND_CORS_ORIGINS: %s", settings.BACKEND_CORS_ORIGINS)
     db_client = AsyncIOMotorClient(settings.MONGO_CONNECTION_STRING).get_database(settings.MONGO_DB)
 
     await init_beanie(

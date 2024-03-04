@@ -15,7 +15,7 @@ ADD ./init.sh /init.sh
 
 RUN chmod +x /init.sh
 
-ENV SCRAPY_ENV prod
+ENV SCRAPY_MODE prod
 ENV INTERVAL 300
 
 # Creating entrypoint for cron

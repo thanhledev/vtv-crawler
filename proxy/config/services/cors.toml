@@ -2,6 +2,6 @@
 [http.middlewares.cors.headers]
 accessControlAllowMethods = ["*"]
 accessControlAllowHeaders= "*"
-accessControlAllowOriginList = ["*"]
+accessControlAllowOriginList = ["http://bongda12h.test"]
 accessControlMaxAge = 3600
 addVaryHeader = true

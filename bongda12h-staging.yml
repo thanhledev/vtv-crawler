@@ -29,7 +29,7 @@ services:
     networks:
       - db
     env_file:
-      - ./.express.env
+      - ./.staging.env
     depends_on:
       mongodb:
         condition: service_healthy
@@ -45,6 +45,8 @@ services:
     build:
       context: ./vtv-scrapy
       dockerfile: vtv-scrapy.Dockerfile
+    env_file:
+      - ./.staging.env
     networks:
       - db
     depends_on:
@@ -56,18 +58,27 @@ services:
     container_name: vtv_backend
     build:
       context: ./crawler-backend
-      dockerfile: vtv-fastapi.Dockerfile 
+      dockerfile: vtv-fastapi.Dockerfile
+    env_file:
+      - ./.staging.env
     networks:
       - db
       - rest
     depends_on:
       mongodb:
         condition: service_healthy
-    #labels:
-    #  - "traefik.enable=true"
-    #  - "traefik.http.routers.backend.rule=Host(`backend.bongda12h.test`)"
-    #  - "traefik.http.routers.backend.middlewares=transparent@file"
-    #  - "traefik.http.services.backend.loadbalancer.server.port=8888"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`backend.bongda12h.test`)"
+      #- "traefik.http.routers.backend.middlewares=testheader"
+      #- "traefik.http.middlewares.testheader.headers.customResponseHeaders.accesscontrolallowmethods=*"
+      #- "traefik.http.middlewares.testheader.headers.customResponseHeaders.accesscontrolallowheaders=*"
+      #- "traefik.http.middlewares.testheader.headers.customResponseHeaders.accesscontrolalloworiginlist=http://bongda12h.test"
+      #- "traefik.http.middlewares.testheader.headers.customResponseHeaders.accesscontrolmaxage=100"
+      #- "traefik.http.middlewares.testheader.headers.customResponseHeaders.addvaryheader=true"
+      - "traefik.http.routers.backend.middlewares=cors@file"
+      #- "traefik.http.routers.backend.middlewares=backendcors@file"
+      - "traefik.http.services.backend.loadbalancer.server.port=8888"
 
   vtv_frontend:
     image: vtv-vue3
@@ -75,6 +86,8 @@ services:
     build:
       context: ./crawler-frontend
       dockerfile: vtv-vue3.Dockerfile
+      args:
+        VUE_MODE: staging
     networks:
       - rest
     depends_on:
@@ -84,14 +97,12 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`bongda12h.test`)"
       - "traefik.http.routers.frontend.middlewares=transparent@file"
-      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+      - "traefik.http.services.frontend.loadbalancer.server.port=8080"
 
   traefik:
     image: traefik:2.5
     container_name: traefik
     restart: on-failure:5
-    command:
-      - "--log.level=DEBUG"
     environment:
       - TZ=${TIME_ZONE:-Europe/Berlin}
     volumes:

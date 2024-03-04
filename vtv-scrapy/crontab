@@ -1,1 +1,0 @@
-*/1 * * * * cd /scrapy_app && scrapy crawl vtvspider >> cron.log 2&>1

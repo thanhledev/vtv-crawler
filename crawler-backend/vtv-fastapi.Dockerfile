@@ -13,6 +13,6 @@ WORKDIR /backend/app
 # Expose the port on which the application will run
 EXPOSE 8888
 
-ENV MODE=prod
+ENV FASTAPI_MODE prod
 
-CMD ["uvicorn", "--reload", "--host", "0.0.0.0", "--port", "8888", "crawler:app"]
+CMD ["uvicorn", "--reload", "--host", "0.0.0.0", "--port", "8888", "crawler:app", "--proxy-headers"]

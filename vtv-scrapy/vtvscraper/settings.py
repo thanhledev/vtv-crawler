@@ -97,15 +97,21 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
 
-SCRAPY_ENV = os.environ.get('SCRAPY_ENV', None)
-if SCRAPY_ENV is None:
-    raise ValueError("Must set SCRAPY_ENV environment var")
+SCRAPY_MODE = os.environ.get('SCRAPY_MODE', None)
+if SCRAPY_MODE is None:
+    raise ValueError("Must set SCRAPY_MODE environment var")
 
-if SCRAPY_ENV == "dev":
+if SCRAPY_MODE == "dev":
     MONGO_URI = 'mongodb://localhost:27017/vtv_news_db_dev'
     MONGO_DB = 'vtv_news_db_dev'
     STORING_COLLECTION = 'thegioi_news'
-elif SCRAPY_ENV == "prod":
+elif SCRAPY_MODE == "staging":
+    MONGO_URI = 'mongodb://mongodb:27017/vtv_news_db_staging'
+    MONGO_DB = 'vtv_news_db_staging'
+    STORING_COLLECTION = 'thegioi_news'
+elif SCRAPY_MODE == "prod":
     MONGO_URI = 'mongodb://mongodb:27017/vtv_news_db_prod'
     MONGO_DB = 'vtv_news_db_prod'
     STORING_COLLECTION = 'thegioi_news'
+else:
+    raise ValueError("Invalid SCRAPY_MODE environment var")
