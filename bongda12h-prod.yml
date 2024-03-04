@@ -77,7 +77,7 @@ services:
       context: ./crawler-backend
       dockerfile: vtv-fastapi.Dockerfile
     env_file:
-      - ./.staging.env
+      - ./.prod.env
     networks:
       - db
       - rest
@@ -102,7 +102,7 @@ services:
       context: ./crawler-frontend
       dockerfile: vtv-vue3.Dockerfile
       args:
-        VUE_MODE: staging
+        VUE_MODE: production
     networks:
       - rest
     depends_on:
